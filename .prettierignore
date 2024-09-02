@@ -1,0 +1,95 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore build output directories
+dist/
+build/
+out/
+
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore logs
+*.log
+logs/
+*.tlog
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore npm/yarn/pnpm lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore lock files for other package managers
+*.lock
+
+# Ignore coverage directories
+coverage/
+
+# Ignore cache directories
+.cache/
+.vscode/
+.vs/
+.idea/
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore images and media files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+*.mp4
+*.mp3
+*.wav
+*.ogg
+*.mov
+
+# Ignore compressed files
+*.zip
+*.rar
+*.tar.gz
+*.7z
+*.bz2
+
+# Ignore minified files
+*.min.js
+*.min.css
+
+# Ignore vendor files
+vendor/
+
+# Ignore specific file types (e.g., binary files)
+*.exe
+*.dll
+*.bin
+*.iso
+
+# Ignore test snapshots
+__snapshots__/
+*.snap
+
+# Ignore specific paths if necessary (examples)
+path/to/some/large/directory/
+another/ignored/path/
+
+# Ignore your CI configuration
+.github/
+.gitlab-ci.yml
+.circleci/
+.travis.yml
+
+# Ignore any configuration or metadata files
+*.json
+*.yaml
+*.yml
