@@ -83,7 +83,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
                   <IssueStatusBadge status={issue.status} />
                 </div>
               </Table.Cell>
-              <Table.Cell className="">
+              <Table.Cell className="hidden md:table-cell">
                 <IssueStatusBadge status={issue.status} />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
