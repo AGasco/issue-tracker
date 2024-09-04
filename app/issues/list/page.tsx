@@ -1,29 +1,13 @@
-import { IssueStatusBadge, Link } from '@/app/components';
+import Pagination from '@/app/components/Pagination';
 import prisma from '@/prisma/client';
 import { Issue, Status } from '@prisma/client';
-import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
-import { Table } from '@radix-ui/themes';
-import NextLink from 'next/link';
 import IssueActions from './IssueActions';
-import Pagination from '@/app/components/Pagination';
+import IssueTable, { columnNames, IssueQuery } from './IssueTable';
+import { Flex } from '@radix-ui/themes';
 
 interface Props {
-  searchParams: {
-    page: string;
-    status: Status;
-    orderBy: keyof Issue;
-  };
+  searchParams: IssueQuery;
 }
-
-const columns: {
-  label: string;
-  value: keyof Issue;
-  className?: string;
-}[] = [
-  { label: 'Issue', value: 'title' },
-  { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
-  { label: 'Created', value: 'createdAt', className: 'hidden md:table-cell' }
-];
 
 const IssuesPage = async ({ searchParams }: Props) => {
   const status = Object.values(Status).includes(searchParams.status)
@@ -31,10 +15,8 @@ const IssuesPage = async ({ searchParams }: Props) => {
     : undefined;
 
   const orderDirection = searchParams.orderBy?.includes('-') ? 'desc' : 'asc';
-  const orderParam = searchParams.orderBy?.replace('-', '');
-  const orderBy = columns
-    .map((column) => column.value)
-    .includes(orderParam as keyof Issue)
+  const orderParam = searchParams.orderBy?.replace('-', '') as keyof Issue;
+  const orderBy = columnNames.includes(orderParam as keyof Issue)
     ? { [orderParam]: orderDirection }
     : undefined;
 
@@ -53,66 +35,19 @@ const IssuesPage = async ({ searchParams }: Props) => {
   });
 
   return (
-    <div>
+    <Flex direction="column" gap="3">
       <IssueActions />
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            {columns.map((col) => {
-              const orderBySameColumn = orderParam === col.value;
-              const newSortOrder =
-                orderBySameColumn && orderDirection === 'asc'
-                  ? `-${col.value}`
-                  : col.value;
-
-              return (
-                <Table.ColumnHeaderCell
-                  key={col.value}
-                  className={col.className}
-                >
-                  <NextLink
-                    href={{
-                      query: { ...searchParams, orderBy: newSortOrder }
-                    }}
-                  >
-                    {col.label}
-                  </NextLink>
-                  {col.value === orderParam && orderDirection === 'asc' && (
-                    <ArrowUpIcon className="inline" />
-                  )}
-                  {col.value === orderParam && orderDirection === 'desc' && (
-                    <ArrowDownIcon className="inline" />
-                  )}
-                </Table.ColumnHeaderCell>
-              );
-            })}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {issues.map((issue) => (
-            <Table.Row key={issue.id}>
-              <Table.Cell>
-                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
-                <div className="block md:hidden">
-                  <IssueStatusBadge status={issue.status} />
-                </div>
-              </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                <IssueStatusBadge status={issue.status} />
-              </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                {issue.createdAt.toDateString()}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+      <IssueTable
+        searchParams={searchParams}
+        orderByParams={{ orderParam, orderDirection }}
+        issues={issues}
+      />
       <Pagination
         itemCount={issueCount}
         pageSize={pageSize}
         currentPage={page}
       />
-    </div>
+    </Flex>
   );
 };
 
